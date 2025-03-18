@@ -1,4 +1,4 @@
-# Microservices Development Lab  
+# Distributed Systems & Microservices Development
 
 This repository contains a series of evolving microservices applications, covering **Java SE, Spring Boot, Angular, Docker, and cloud-based deployment**. Each stage builds on the previous one, introducing new technologies and concepts for **backend, frontend, containerization, and service orchestration**.  
 

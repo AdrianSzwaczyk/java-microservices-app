@@ -1,0 +1,58 @@
+services:
+  gateway:
+    image: gateway
+    restart: always
+    build:
+      context: ./lab4/gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - GATEWAY_HOST=http://gateway:8080
+      - COUNTRY_URL=http://country-management:8080
+      - CITY_URL=http://city-management:8080
+
+  city-management:
+    image: city-management
+    restart: always
+    build:
+      context: ./lab4/city-management
+
+  country-management:
+    image: country-management
+    restart: always
+    build:
+      context: ./lab4/country-management
+    environment:
+      - CITY_URL=http://city-management:8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://categories:5432/categories
+      - SPRING_DATASOURCE_USERNAME=admin
+      - SPRING_DATASOURCE_PASSWORD=password
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      - categories
+
+  angular-app:
+    image: angular-app
+    restart: always
+    build:
+      context: ./angular-app
+    ports:
+      - "8083:80"
+    environment:
+      - API_URL=http://gateway:8080/api
+
+  categories:
+    image: postgres:15
+    container_name: categories
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=categories
+    ports:
+      - "5432:5432"
+    volumes:
+      - categories-data:/var/lib/postgresql/data
+
+volumes:
+  categories-data:

@@ -1,0 +1,38 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: false
+            maxAge: 3600
+      enabled: true
+      routes:
+        - id: country-service
+          uri: http://country-management:8080
+          predicates:
+            - Path=/api/countries/**
+          filters:
+            - AddRequestHeader=X-Request-Foo, Bar
+
+        - id: city-service
+          uri: http://city-management:8080
+          predicates:
+            - Path=/api/cities/**
+          filters:
+            - AddRequestHeader=X-Request-Bar, Foo
+
+server:
+  port: 8080

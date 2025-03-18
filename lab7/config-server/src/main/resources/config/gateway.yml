@@ -1,0 +1,53 @@
+spring:
+  main:
+    web-application-type: reactive
+  application:
+    name: gateway
+  cloud:
+    discovery:
+      enabled: true
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+            allowCredentials: false
+            maxAge: 3600
+      enabled: true
+      routes:
+        - id: country-management
+          uri: lb://country-management
+          predicates:
+            - Path=/api/countries/**
+          filters:
+            - AddRequestHeader=X-Request-Foo, Bar
+
+        - id: city-management
+          uri: lb://city-management
+          predicates:
+            - Path=/api/cities/**
+          filters:
+            - AddRequestHeader=X-Request-Bar, Foo
+eureka:
+  instance:
+    hostname: gateway
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+server:
+  port: 8080
+
+logging:
+  level:
+    com.netflix.eureka: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG

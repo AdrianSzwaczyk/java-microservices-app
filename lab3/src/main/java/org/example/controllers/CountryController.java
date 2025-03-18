@@ -1,0 +1,70 @@
+package org.example.controllers;
+
+import org.example.classes.Country;
+import org.example.dto.city.CityListDTO;
+import org.example.dto.country.*;
+import org.example.services.CountryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@RestController
+@RequestMapping("/api/countries")
+public class CountryController {
+
+    @Autowired
+    private CountryService countryService;
+
+    @GetMapping
+    public List<CountryListDTO> getAllCountries() {
+        return countryService.findAll().stream()
+                .map(country -> new CountryListDTO(country.getId(), country.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/{id}")
+    public CountryReadDTO getCountry(@PathVariable UUID id) {
+        Country country = countryService.findById(id);
+        return new CountryReadDTO(country.getId(), country.getName(), country.getPopulation());
+    }
+    @GetMapping("/cities/{countryId}")
+    public List<CityListDTO> getCitiesByCountryId(@PathVariable UUID countryId) {
+        Country country = countryService.findById(countryId);
+        if (country == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not found");
+        }
+        return country.getCities().stream()
+                .map(city -> new CityListDTO(city.getId(), city.getName()))
+                .collect(Collectors.toList());
+    }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public CountryReadDTO createCountry(@RequestBody CountryCreateUpdateDTO dto) {
+        Country country = Country.builder().name(dto.getName()).population(dto.getPopulation()).id(null).build();
+        country = countryService.save(country);
+        return new CountryReadDTO(country.getId(), country.getName(), country.getPopulation());
+    }
+
+    @PutMapping("/{id}")
+    public CountryReadDTO updateCountry(@PathVariable UUID id, @RequestBody CountryCreateUpdateDTO dto) {
+        Country existingCountry = countryService.findById(id);
+
+        existingCountry.setName(dto.getName());
+        existingCountry.setPopulation(dto.getPopulation());
+
+        Country updatedCountry = countryService.save(existingCountry);
+
+        return new CountryReadDTO(updatedCountry.getId(), updatedCountry.getName(), updatedCountry.getPopulation());
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCountry(@PathVariable UUID id) {
+        countryService.delete(id);
+    }
+}

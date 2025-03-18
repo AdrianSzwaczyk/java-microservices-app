@@ -1,0 +1,56 @@
+@countryId = d6682a3a-18ca-4e7d-a948-e54959e5d4f8
+@countryId2 = 7db409f8-8daf-4055-ac6b-6496fcbb5e5f
+@cityId = 4dd7f64d-69d6-4e57-87a9-28b10b42037e
+@cityId2 = de20c344-2ef2-48b7-a685-b2dc215c4319
+@wrongId = 8ad7f84d-69d6-4e57-87a9-28b10b41111e
+
+### 1. Get all countries
+GET http://localhost:8080/api/countries
+
+### 6. Get all cities
+GET http://localhost:8080/api/cities
+
+### 2. Get a single city
+GET http://localhost:8080/api/cities/{{cityId}}
+
+### 4. Create a new city
+POST http://localhost:8080/api/cities/{{countryId2}}
+Content-Type: application/json
+
+{
+  "name": "TestCity",
+  "population": 500000
+}
+
+### 7. Update an existing city
+PUT http://localhost:8080/api/cities/{{cityId2}}
+Content-Type: application/json
+
+{
+  "name": "UpdatedCity",
+  "population": 600000,
+  "countryId": "{{countryId}}"
+}
+
+### 6. Get all cities
+GET http://localhost:8080/api/cities
+
+### 8. Delete a city by ID
+DELETE http://localhost:8080/api/cities/{{cityId2}}
+
+### 6. Get all cities
+GET http://localhost:8080/api/cities
+
+### 11. Try to add a city to a non-existing country
+POST http://localhost:8080/api/cities/{{wrongId}}
+Content-Type: application/json
+
+{
+  "name": "NewCity",
+  "population": 400000
+}
+
+### 6. Get all countries from city manager
+GET http://localhost:8080/api/cities/country_testing
+
+

@@ -6,4 +6,4 @@ This directory contains advanced deployment configurations with service discover
 - Centralized configuration management.  
 
 **How to Launch:**
-Run the Spring Boot main class in `src/main/java`.
+Run the `to_jar.bat` file. Then run `build_and_launch.bat`. Docker required.

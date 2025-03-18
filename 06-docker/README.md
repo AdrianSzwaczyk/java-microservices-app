@@ -5,4 +5,4 @@ This directory contains Docker configurations for containerizing the microservic
 - External databases and environment variable configurations.  
 
 **How to Launch:**
-Run `docker-compose up` with all required environment variables set.
+Run `run.ps1`. Docker required.

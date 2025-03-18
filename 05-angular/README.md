@@ -6,4 +6,4 @@ This directory contains an Angular-based frontend application that interacts wit
 - API communication with backend services.  
 
 **How to Launch:**
-Run `npm install` and `ng serve` in the project directory.
+Start each Spring Boot service separately - run `CountyApp`, `CityApp` and `GatewayApp`. Then run `npm install` and `ng serve` in the `angular-app` directory.

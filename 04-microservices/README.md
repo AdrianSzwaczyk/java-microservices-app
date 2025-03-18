@@ -6,4 +6,4 @@ This directory decomposes the monolithic application into separate microservices
 - Event-driven communication for synchronization.  
 
 **How to Launch:**
-Start each Spring Boot service separately.
+Start each Spring Boot service separately - run `CountyApp`, `CityApp` and `GatewayApp`. Then use `cityRequests.http` and `countryRequests.http` from `gateway` directory for testing.
